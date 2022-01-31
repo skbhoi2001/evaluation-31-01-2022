@@ -1,13 +1,10 @@
 let data = [];
        async function loadProducts(){
             try{
-            return fetch("http://localhost:3000/data")
-            .then(function(response){
-                return response.json();
-            })
-            .catch(function(error){
+            let response = await fetch(`http://localhost:3000/data`)
+             response = await response.json()
 
-            })
+            return response
             }
             catch(err){
 
