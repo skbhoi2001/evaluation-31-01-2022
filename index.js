@@ -1,10 +1,17 @@
+
+window.addEventListener('load',function(){
+    loadProducts()
+    
+})
+
+
 let data = [];
        async function loadProducts(){
             try{
             let response = await fetch(`http://localhost:3000/data`)
              response = await response.json()
 
-            return response
+            return createProductCards(response);
             }
             catch(err){
 
@@ -40,8 +47,8 @@ let data = [];
             const p2 = document.createElement("p")
             p2.textContent=`${data.comments[1]}`
             let update = document.createElement('div')
-            update.innerHTML  = `<input type="text" id="update1" placeholder="update1">
-            <input type="text" id="update2" placeholder="update2">
+            update.innerHTML  = `<input type="text" id="update1"  placeholder="update1">
+            <input type="text" id="update2"  placeholder="update2">
             <button id="updatedata1">update1</button>
             <button id="updatedata2">update2</button>`
 
@@ -51,8 +58,28 @@ let data = [];
             return div;
         }
 
-        loadProducts()
-        .then(function(response){
-            console.log(response);
-            createProductCards(response);
+        let addData = document.getElementById('addData')
+        addData.addEventListener('click',function(){
+            addDataElement()
         })
+
+
+        function addDataElement(){
+            let bookName = document.getElementById("bookName").value
+            let authorName = document.getElementById("authorName").value
+            let payload = {
+                "book" : bookName,
+                "author" : authorName
+            }
+
+            fetch("http://localhost:3000/data", {
+                method: "POST",
+                body: JSON.stringify(payload),
+                headers: { "Content-type": "application/json; charset=UTF-8" },
+            })
+            .then((response) => response.json())
+            .then((json) => loadProducts())
+            .catch((err) => console.log(err));
+
+            
+        }
